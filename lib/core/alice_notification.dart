@@ -47,14 +47,10 @@ class AliceNotification {
     );
 
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings(notificationIcon);
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
-    const DarwinInitializationSettings initializationSettingsMacOS =
-        DarwinInitializationSettings();
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
+    final AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(notificationIcon);
+    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings();
+    const DarwinInitializationSettings initializationSettingsMacOS = DarwinInitializationSettings();
+    final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       macOS: initializationSettingsMacOS,
@@ -70,28 +66,24 @@ class AliceNotification {
   Future<void> _requestNotificationPermissions() async {
     if (OperatingSystem.isIOS || OperatingSystem.isMacOS) {
       await _flutterLocalNotificationsPlugin
-          ?.resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
+          ?.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
             alert: true,
             badge: true,
             sound: true,
           );
       await _flutterLocalNotificationsPlugin
-          ?.resolvePlatformSpecificImplementation<
-              MacOSFlutterLocalNotificationsPlugin>()
+          ?.resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
             alert: true,
             badge: true,
             sound: true,
           );
     } else if (OperatingSystem.isAndroid) {
-      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-          _flutterLocalNotificationsPlugin
-              ?.resolvePlatformSpecificImplementation<
-                  AndroidFlutterLocalNotificationsPlugin>();
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation = _flutterLocalNotificationsPlugin
+          ?.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
-      await androidImplementation?.requestNotificationsPermission();
+      await androidImplementation?.requestPermission();
     }
   }
 
@@ -108,14 +100,10 @@ class AliceNotification {
     required AliceStats stats,
   }) =>
       <String>[
-        if (stats.loading > 0)
-          '${context.i18n(AliceTranslationKey.notificationLoading)} ${stats.loading}',
-        if (stats.successes > 0)
-          '${context.i18n(AliceTranslationKey.notificationSuccess)} ${stats.successes}',
-        if (stats.redirects > 0)
-          '${context.i18n(AliceTranslationKey.notificationRedirect)} ${stats.redirects}',
-        if (stats.errors > 0)
-          '${context.i18n(AliceTranslationKey.notificationError)} ${stats.errors}',
+        if (stats.loading > 0) '${context.i18n(AliceTranslationKey.notificationLoading)} ${stats.loading}',
+        if (stats.successes > 0) '${context.i18n(AliceTranslationKey.notificationSuccess)} ${stats.successes}',
+        if (stats.redirects > 0) '${context.i18n(AliceTranslationKey.notificationRedirect)} ${stats.redirects}',
+        if (stats.errors > 0) '${context.i18n(AliceTranslationKey.notificationError)} ${stats.errors}',
       ].join(' | ');
 
   /// Shows current stats notification. It formats [stats] into simple
@@ -140,9 +128,7 @@ class AliceNotification {
 
       await _flutterLocalNotificationsPlugin?.show(
         0,
-        context
-            .i18n(AliceTranslationKey.notificationTotalRequests)
-            .replaceAll(_callCount, stats.total.toString()),
+        context.i18n(AliceTranslationKey.notificationTotalRequests).replaceAll(_callCount, stats.total.toString()),
         message,
         _notificationDetails,
         payload: _payload,
