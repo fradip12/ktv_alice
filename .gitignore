@@ -1,0 +1,5 @@
+.fvm/flutter_sdk
+.fvm
+.fvm/
+.fvm/*
+.flutter-plugins-dependencies
