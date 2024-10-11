@@ -12,14 +12,16 @@ class AliceLogger {
   /// Subject which keeps logs.
   final BehaviorSubject<List<AliceLog>> _logsSubject;
 
-  AliceLogger({required this.maximumSize})
-      : _logsSubject = BehaviorSubject.seeded([]);
+  AliceLogger({required this.maximumSize}) : _logsSubject = BehaviorSubject.seeded([]);
 
   /// Getter of stream of logs
   Stream<List<AliceLog>> get logsStream => _logsSubject.stream;
 
   /// Getter of all logs
   List<AliceLog> get logs => _logsSubject.value;
+
+  /// Getter Last logs
+  AliceLog get lastLog => _logsSubject.value.last;
 
   /// Adds all logs.
   void addAll(Iterable<AliceLog> logs) {
@@ -48,8 +50,7 @@ class AliceLogger {
   /// Returns raw logs from Android via ADB.
   Future<String> getAndroidRawLogs() async {
     if (OperatingSystem.isAndroid) {
-      final ProcessResult process =
-          await Process.run('logcat', ['-v', 'raw', '-d']);
+      final ProcessResult process = await Process.run('logcat', ['-v', 'raw', '-d']);
       return process.stdout as String;
     }
     return '';

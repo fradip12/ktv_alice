@@ -6,6 +6,9 @@ import 'package:alice/ui/common/alice_context_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../model/alice_http_call.dart';
+import '../ui/common/alice_dialog.dart';
+
 /// Helper for displaying local notifications.
 class AliceNotification {
   static const String _payload = 'Alice';
@@ -106,20 +109,36 @@ class AliceNotification {
         if (stats.errors > 0) '${context.i18n(AliceTranslationKey.notificationError)} ${stats.errors}',
       ].join(' | ');
 
+  /// Shows Snackbar for quick informations
+  Future<void> showSnack({
+    required BuildContext context,
+    required AliceHttpCall log,
+  }) async {
+    AliceGeneralDialog.snack(
+      context: context,
+      title: log.method,
+      description: log.uri,
+      code: log.response?.status ?? 1,
+    );
+  }
+
   /// Shows current stats notification. It formats [stats] into simple
   /// notification which is displayed when stats has changed.
   Future<void> showStatsNotification({
     required BuildContext context,
     required AliceStats stats,
+    required AliceHttpCall log,
   }) async {
     try {
       if (_isNotificationProcessing) {
         return;
       }
+
       final message = _getNotificationMessage(
         context: context,
         stats: stats,
       );
+
       if (message == _notificationMessageDisplayed) {
         return;
       }
@@ -133,8 +152,11 @@ class AliceNotification {
         _notificationDetails,
         payload: _payload,
       );
-
       _notificationMessageDisplayed = message;
+
+      if (stats.loading != 1) {
+        showSnack(context: context, log: log);
+      }
     } catch (error) {
       AliceUtils.log(error.toString());
     } finally {

@@ -70,9 +70,11 @@ class AliceCore {
   Future<void> _onCallsChanged(List<AliceHttpCall>? calls) async {
     if (calls != null && calls.isNotEmpty) {
       final AliceStats stats = _configuration.aliceStorage.getStats();
+
       _notification?.showStatsNotification(
         context: getContext()!,
         stats: stats,
+        log: calls.last,
       );
     }
   }
@@ -96,12 +98,10 @@ class AliceCore {
   }
 
   /// Get context from navigator key. Used to open inspector route.
-  BuildContext? getContext() =>
-      _configuration.navigatorKey?.currentState?.overlay?.context;
+  BuildContext? getContext() => _configuration.navigatorKey?.currentState?.overlay?.context;
 
   /// Add alice http call to calls subject
-  FutureOr<void> addCall(AliceHttpCall call) =>
-      _configuration.aliceStorage.addCall(call);
+  FutureOr<void> addCall(AliceHttpCall call) => _configuration.aliceStorage.addCall(call);
 
   /// Add error to existing alice http call
   FutureOr<void> addError(AliceHttpError error, int requestId) =>
@@ -116,19 +116,16 @@ class AliceCore {
 
   /// Selects call with given [requestId]. It may return null.
   @protected
-  AliceHttpCall? selectCall(int requestId) =>
-      _configuration.aliceStorage.selectCall(requestId);
+  AliceHttpCall? selectCall(int requestId) => _configuration.aliceStorage.selectCall(requestId);
 
   /// Returns stream which returns list of HTTP calls
-  Stream<List<AliceHttpCall>> get callsStream =>
-      _configuration.aliceStorage.callsStream;
+  Stream<List<AliceHttpCall>> get callsStream => _configuration.aliceStorage.callsStream;
 
   /// Returns all stored HTTP calls.
   List<AliceHttpCall> getCalls() => _configuration.aliceStorage.getCalls();
 
   /// Save all calls to file.
-  Future<AliceExportResult> saveCallsToFile(BuildContext context) =>
-      AliceExportHelper.saveCallsToFile(
+  Future<AliceExportResult> saveCallsToFile(BuildContext context) => AliceExportHelper.saveCallsToFile(
         context,
         _configuration.aliceStorage.getCalls(),
       );
@@ -144,8 +141,7 @@ class AliceCore {
 
   /// Subscribes to storage for call changes.
   void _subscribeToCallChanges() {
-    _callsSubscription =
-        _configuration.aliceStorage.callsStream.listen(_onCallsChanged);
+    _callsSubscription = _configuration.aliceStorage.callsStream.listen(_onCallsChanged);
   }
 
   /// Unsubscribes storage for call changes.
