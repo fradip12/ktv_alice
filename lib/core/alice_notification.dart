@@ -154,9 +154,9 @@ class AliceNotification {
       );
       _notificationMessageDisplayed = message;
 
-      if (stats.loading != 1) {
-        showSnack(context: context, log: log);
-      }
+      // if (stats.loading != 1) {
+      //   showSnack(context: context, log: log);
+      // }
     } catch (error) {
       AliceUtils.log(error.toString());
     } finally {
