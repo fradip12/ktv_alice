@@ -86,7 +86,7 @@ class AliceNotification {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation = _flutterLocalNotificationsPlugin
           ?.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
-      await androidImplementation?.requestPermission();
+      await androidImplementation?.requestNotificationsPermission();
     }
   }
 
