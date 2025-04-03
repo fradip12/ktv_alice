@@ -12,8 +12,8 @@ dependencies:
   flutter_local_notifications: ^17.2.1+2
   rxdart: ^0.27.0
   path_provider: ^2.0.12
-  permission_handler: ^10.3.0
-  dio: ^4.0.6
+  permission_handler: ^11.0.0
+  dio: ^5.2.1+1
   # package_info_plus: ^8.0.0
   open_filex: ^4.5.0
   # sensors_plus: ^6.0.1
